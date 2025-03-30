@@ -1,0 +1,5 @@
+.env.txt
+db.sqlite3
+.cache.sqlite
+static/
+_pycache_/
