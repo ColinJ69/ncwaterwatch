@@ -13,17 +13,17 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-from dotenv import dotenv_values
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 secret_key_path = '\.env.txt'
 current_path = os.getcwd()
-print(type(current_path))
+
 combined_paths =  current_path + secret_key_path
 ROOT_URLCONF = 'Web.urls'
-print(combined_paths)
+
 load_dotenv(combined_paths)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/

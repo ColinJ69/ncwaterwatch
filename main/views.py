@@ -21,9 +21,15 @@ from django.contrib import messages
 import datetime
 import random
 from users.models import User
+from dotenv import load_dotenv
+import os
 
 
-# Create your views here.
+API_KEY_path = '\.env.txt'
+current_path = os.getcwd()
+combined_paths =  current_path + API_KEY_path
+load_dotenv(combined_paths)
+API_KEY = os.getenv("API_KEY")
 def homepage(request):
     
     if request.method == 'POST':
@@ -203,7 +209,7 @@ def action(request):
             
                 clean_address = urllib.parse.quote(address, safe='/', encoding=None, errors=None)
             
-                call = requests.get(f"https://www.googleapis.com/civicinfo/v2/representatives?key=AIzaSyDxGsCeJRDMAgqfTVJBpnHpVQ-vE_7K1cI&address={clean_address}")
+                call = requests.get(f"https://www.googleapis.com/civicinfo/v2/representatives?key={API_KEY}&address={clean_address}")
                 response = call.json()
                 divisions = response['divisions']
                 lis = list(divisions.values())
@@ -226,7 +232,7 @@ def action(request):
                 email_house = re.sub(r'[0-9]+', '', email_house)
                 senate_member = re.sub(r'[0-9]+', '', senate_member)
                 email_senate = re.sub(r'[0-9]+', '', email_senate)
-                print(house_member,senate_member,congress_member)
+                
                 
                 return render(request, 'action.html', {'rep_sub': False, 'house': house_member, 'senate': senate_member, 'congress': congress_member, 'link': c_link, 'email': i})
         elif 'repForm' in req:
@@ -240,11 +246,11 @@ def action(request):
                     lat = float(address.split(',')[0])
                     lng = float(address.split(',')[1])
                     print(lat, lng)
-                    geolocator = Nominatim(user_agent="HydroHaven") 
+                    geolocator = Nominatim(user_agent="ncwaterwatch") 
                     location = geolocator.reverse((lat, lng), exactly_one=True) 
                     clean_address = location.address
                 
-                call = requests.get(f"https://www.googleapis.com/civicinfo/v2/representatives?key=AIzaSyDxGsCeJRDMAgqfTVJBpnHpVQ-vE_7K1cI&address={clean_address}")
+                call = requests.get(f"https://www.googleapis.com/civicinfo/v2/representatives?key={API_KEY}&address={clean_address}")
 
                 response = call.json()
                 
@@ -599,7 +605,7 @@ def post_story(request):
         "Saturday story",
         '',
         "ncwaterwatch.adm@gmail.com",
-        ['johnstoncolin394@gmail.com'],
+        [f'{os.getenv("EMAIL_PERS")}'],
         
         )   
         msg.attach_alternative(html, "text/html")
@@ -609,7 +615,7 @@ def post_story(request):
         for i in newsletter.objects.all():
         
             msg = EmailMultiAlternatives(
-            "Saturday story",
+            "Water Watch Newsletter",
             '',
             "ncwaterwatch.adm@gmail.com",
             [i.email],

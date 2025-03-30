@@ -6,6 +6,15 @@ from retry_requests import retry
 import requests
 import json
 import os
+from dotenv import load_dotenv
+
+
+
+API_KEY_path = '\.env.txt'
+current_path = os.getcwd()
+combined_paths =  current_path + API_KEY_path
+load_dotenv(combined_paths)
+
 def get_weather(x):
 
     cache_session = requests_cache.CachedSession('.cache', expire_after = -1)
@@ -86,7 +95,7 @@ def get_air(x):
       ],
     }
 
-    gyatt = requests.post('https://airquality.googleapis.com/v1/history:lookup?key=AIzaSyDxGsCeJRDMAgqfTVJBpnHpVQ-vE_7K1cI', json=params)
+    gyatt = requests.post(f'https://airquality.googleapis.com/v1/history:lookup?key={os.getenv("API_KEY")}', json=params)
     i = gyatt.json()
     
 
@@ -97,7 +106,7 @@ def get_air(x):
     pm10=pollutants[3]['concentration']['value']
     pm25=pollutants[4]['concentration']['value']
     so2 =pollutants[5]['concentration']['value']
-    print('airg')
+    
     return [co, no, o3, pm10, pm25, so2] 
 
 
@@ -122,13 +131,13 @@ df = pd.read_excel("C:/Users/johns/OneDrive/Documents/pfas.xlsx")
 def get_coords(x):
     
     ex = urllib.parse.quote_plus(x)
-    req = requests.post(f'https://maps.googleapis.com/maps/api/geocode/json?address={ex}&key=AIzaSyDxGsCeJRDMAgqfTVJBpnHpVQ-vE_7K1cI')
+    req = requests.post(f'https://maps.googleapis.com/maps/api/geocode/json?address={ex}&key={os.getenv("API_KEY")}')
     resp = req.json()
 
 
     lat , lng = resp['results'][0]['geometry']['location']['lat'], resp['results'][0]['geometry']['location']['lng']
     county = resp['results'][0]['address_components'][3]['long_name']
-    print('coords')
+    
 
     return (str(lat) + ',' + str(lng)), county
 
@@ -147,7 +156,7 @@ def pollutors(x):
                 if c < 1:
                     num1 += 1
 
-    print('pollutors')
+   
     return (num12, num4, num1)
 
 
@@ -166,7 +175,7 @@ def known(x):
             known_dic[l] = c
     closest = min(known_dic, key=known_dic.get)
     closest_dict = known_dic[closest] 
-    print('known')
+  
     return (knum, closest, closest_dict)
 
 def basin(x):
@@ -179,7 +188,7 @@ def basin(x):
     closest = min(dist, key=dist.get)
     lat = float(closest.split(',')[0])  
     get_basin = df.loc[df['lat']==lat]['Basin'].item()
-    print('basin')
+  
     return get_basin
 
 
@@ -192,7 +201,7 @@ def final(x, y):
     a = get_air(coords)
     farm, land = get_farm(county)
     entry = [float(coords.split(',')[0]), float(coords.split(',')[1].removeprefix(' ')),farm, land,p1,p4,p12,knowna, dist, name, basin(coords), w[0], w[1], w[2], w[3], w[4],w[5],w[6],w[7],a[0], a[1],a[2],a[3],a[4],a[5], y]
-    print(entry)
+ 
     return entry
 
 def predict(address, well_depth):
@@ -203,7 +212,7 @@ def predict(address, well_depth):
     with open(path, 'rb') as f:
         model = pickle.load(f)
     y_pred = model.predict(predictors)
-    print(y_pred)
+   
     return (y_pred)
 
 
