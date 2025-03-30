@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+    <link id="sheet-theme" rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script>
+
+    </script>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body{
+            display:flex;
+            align-items:center;
+            justify-content: center;
+        }
+        .registery {
+            text-align: center;
+            
+          
+            height: 600px;
+            width: 500px;
+            top: 20%;
+            left: 35%;
+            background-color: white;
+            border-radius: 25px;
+            z-index: 2;
+            padding: 50px;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body style="">
+    <nav role="navigation" style="position:relative;">
+
+
+        <div id="menuToggle">
+
+            <input type="checkbox" style="z-index: 5 " onclick="menuchangeZvalue()" />
+
+
+            <span style="background: #616161; z-index: 4 "></span>
+            <span style="background: #616161; z-index: 4 "></span>
+            <span style="background: #616161; z-index: 4 "></span>
+
+
+            <ul id="menu" style="background: #2F2F2F; color:white;">
+                <li><a href="/" class="underline">Home</a></li>
+
+                <li><a href="guides" class="underline">Guides</a></li>
+
+                <li><a href="maps" class="underline">Maps</a></li>
+
+                <li><a href="games" class="underline">Quizzes</a></li>
+
+                <li><a href="action" class="underline">Take action</a></li>
+
+                <li><a href="news" class="underline">News</a></li>
+
+
+                <li style="color:darkorange">
+                    <a style="position: relative; bottom: 0%;color:darkorange;" href="{% url 'logouts' %}">
+                        <h5>Logout</h5>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+    <div style="width:100%;height:150%; padding-bottom:10%;">
+        <div class="login" style="display:block;flex-direction:column;">
+            <p style="font-size:2rem;">Create account</p>
+            <form method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-secondary" style="width: 100%; border-radius: 5px; height: 35px; border: 2px solid rgba(0, 0, 0, 0.1);" name="userReg" type="submit">Submit</button>
+                <br /><br />
+                <p style="float:left;margin:0;">Already have an account? <a style="color:dodgerblue;cursor:pointer;" href="logins">Login here</a></p><br />
+                <p style="float:left;">Forgot password? <a style="color:dodgerblue" href="password_reset">Click here</a></p>
+            </form>
+        </div>
+    </div>
+  
+</body>
+</html>
